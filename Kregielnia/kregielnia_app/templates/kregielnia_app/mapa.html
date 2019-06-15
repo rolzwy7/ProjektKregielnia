@@ -1,0 +1,15 @@
+{% extends '_Main/template.html' %}
+{% load staticfiles %}
+{% block title %}Mapa{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}
+<div class="column">
+  <h1 class="title">Mapa</h1>
+  <div class="has-text-centered">
+    <div class="mapouter"><div class="gmap_canvas"><iframe width="600" height="300" id="gmap_canvas" src="https://maps.google.com/maps?q=Katowice%20Ko%C5%9Bciuszki%20229&t=&z=15&ie=UTF8&iwloc=&output=embed" frameborder="0" scrolling="no" marginheight="0" marginwidth="0"></iframe><a href="https://www.yellowrocketagency.com"></a></div><style>.mapouter{position:relative;text-align:right;height:300px;width:600px;}.gmap_canvas {overflow:hidden;background:none!important;height:300px;width:600px;}</style></div>
+  </div>
+  <hr>
+  <h1 class="title">Adres:</h1>
+    <p>Katowice, Kościuszki 229</p>
+</div>
+{% endblock %}

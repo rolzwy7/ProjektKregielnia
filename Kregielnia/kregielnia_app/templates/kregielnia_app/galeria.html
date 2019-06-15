@@ -1,0 +1,102 @@
+{% extends '_Main/template.html' %}
+{% load staticfiles %}
+{% block title %}Galeria{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}
+<div class="column is-12">
+
+  <div class="container">
+
+    <div class="columns">
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+    </div>
+
+
+
+    <div class="columns">
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+    </div>
+
+
+
+    <div class="columns">
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+      <div class="column is-4">
+        <a href="{% static 'assets/placeholder.gif' %}" class="test-popup-link">
+          <figure class="image is-square">
+            <img src="{% static 'assets/placeholder.gif' %}">
+          </figure>
+        </a>
+      </div>
+    </div>
+
+
+
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  $('.test-popup-link').magnificPopup({
+  type: 'image',
+  gallery: {
+    enabled: true
+  }
+  // other options
+  });
+</script>
+{% endblock %}

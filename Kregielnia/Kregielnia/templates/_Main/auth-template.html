@@ -26,7 +26,7 @@
   </head>
 
   <body>
-    {% include './upper-bar.html' %}
+
 
     <div class="container">
     <!-- Logo -->
@@ -39,24 +39,9 @@
       </div>
     </div>
     <div class="columns">
-      <div class="column is-12">
-        <div class="tabs is-centered">
-          <ul>
-            <li><a href="/">Strona główna</a></li>
-            <li><a href="{% url 'rezerwacje' %}">Rezerwuj</a></li>
-            <li><a href="{% url 'mapa' %}">Mapa</a></li>
-            <li><a href="{% url 'cennik' %}">Cennik</a></li>
-            <li><a href="{% url 'galeria' %}">Galeria</a></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-
-    <div class="columns">
       {% block content %}{% endblock %}
     </div>
   </div>
 
-{% include '_Main/footer.html' %}
   </body>
 </html>

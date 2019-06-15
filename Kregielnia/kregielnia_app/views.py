@@ -25,3 +25,13 @@ class CennikView(View):
 class RezerwacjeView(View):
     def get(self, request):
         return render(request, "kregielnia_app/rezerwacje.html", {})
+
+
+class LogowanieView(View):
+    def get(self, request):
+        return render(request, "kregielnia_app/logowanie.html", {})
+
+
+class RejestracjaView(View):
+    def get(self, request):
+        return render(request, "kregielnia_app/rejestracja.html", {})

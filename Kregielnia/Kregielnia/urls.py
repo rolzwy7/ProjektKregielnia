@@ -12,6 +12,8 @@ urlpatterns = [
     path('cennik/', views.CennikView.as_view(), name="cennik"),
     path('rezerwacje/', views.RezerwacjeView.as_view(), name="rezerwacje"),
     path('mapa/', views.MapView.as_view(), name="mapa"),
+    path('logowanie/', views.LogowanieView.as_view(), name="logowanie"),
+    path('rejestracja/', views.RejestracjaView.as_view(), name="rejestracja"),
     path('', views.HomepageView.as_view(), name="homepage"),
 ]
 

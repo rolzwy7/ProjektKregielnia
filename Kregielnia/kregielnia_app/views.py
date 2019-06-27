@@ -11,6 +11,9 @@ from django.views.generic.list import ListView
 from django.views import generic
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import login_required
+from django.utils import timezone
+from datetime import timedelta
+from django.db.models import Q
 
 
 class HomepageView(View):
@@ -60,7 +63,6 @@ class RezerwacjeView(View):
         ilosc_godzin = request.POST.get("ilosc_godzin")
         dodatkowe_informacje = request.POST.get("dodatkowe_informacje")
 
-        print(request.POST)
 
         if int(ilosc_torow) * 6 < int(ilosc_osob):
             data = {
@@ -83,8 +85,7 @@ class RezerwacjeView(View):
             godzina_rozpoczecia,
             ilosc_torow,
             ilosc_osob,
-            ilosc_godzin,
-            # dodatkowe_informacje
+            ilosc_godzin
         ]
         if not all(params):
             return HttpResponseBadRequest(content=b"400 Bad Request")
@@ -121,6 +122,36 @@ class RezerwacjeView(View):
         )
 
         dt_zakonczenia = dt_rozpoczecia + timedelta(hours=int(ilosc_godzin))
+
+
+        # # WARNING: AZNE
+        test_ = Rezerwacja.objects.filter(
+            (
+                Q(dt_zakonczenia__gt=dt_rozpoczecia)
+            &
+                Q(dt_rozpoczecia__lt=dt_rozpoczecia)
+            )
+            |
+            (
+                Q(dt_zakonczenia__gt=dt_zakonczenia)
+            &
+                Q(dt_rozpoczecia__lt=dt_zakonczenia)
+            )
+        )
+        # import pdb; pdb.set_trace()
+        tory_kolidujace = 0
+        for _ in test_:
+            tory_kolidujace += int(_.ilosc_torow)
+        # import pdb; pdb.set_trace()
+        war = (12 - tory_kolidujace - int(ilosc_torow))
+        if war < 0:
+            data = {
+                "failed": "Podana ilość torów jest niedostępna w tym czasie",
+                "przekaski": Przekaski.objects.all(),
+                "tory": Tor.objects.all()
+            }
+            return render(request, "kregielnia_app/rezerwacje.html", data)
+        # import pdb; pdb.set_trace()
 
         rezerwacja = Rezerwacja(
             user_id=Profil.objects.get(user=request.user.id),

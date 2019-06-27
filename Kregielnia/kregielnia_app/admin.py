@@ -12,9 +12,9 @@ class PrzekaskiAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(models.Buty)
-class ButyAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(models.Buty)
+# class ButyAdmin(admin.ModelAdmin):
+#     pass
 
 
 @admin.register(models.Rezerwacja)
@@ -31,9 +31,9 @@ class PrzekaskiZamowienieAdmin(admin.ModelAdmin):
     pass
 
 
-@admin.register(models.ButyZamowienie)
-class ButyZamowienieAdmin(admin.ModelAdmin):
-    pass
+# @admin.register(models.ButyZamowienie)
+# class ButyZamowienieAdmin(admin.ModelAdmin):
+#     pass
 
 
 @admin.register(models.Profil)

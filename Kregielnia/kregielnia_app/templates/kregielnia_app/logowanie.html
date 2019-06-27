@@ -8,28 +8,40 @@
     <a href="/">Powróć do strony głównej</a>
   </p>
   <hr>
+  {% if auth_failed %}
+    <article class="message is-danger">
+  <div class="message-body">
+    {{auth_failed}}
+  </div>
+</article>
+    <hr>
+  {% endif %}
+
+  <form action="." method="post">{% csrf_token %}
+    <input type="hidden" name="next" value="{{next}}">
+    <div class="field">
+    <p class="control has-icons-left has-icons-right">
+      <input class="input" type="text" placeholder="Nazwa użytkownika" name="username" required autocomplete="off" autofocus>
+      <span class="icon is-small is-left">
+        <i class="fas fa-user"></i>
+      </span>
+    </p>
+  </div>
   <div class="field">
-  <p class="control has-icons-left has-icons-right">
-    <input class="input" type="email" placeholder="E-mail">
-    <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control has-icons-left">
-    <input class="input" type="password" placeholder="Hasło">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control">
-    <button class="button is-success">
-      Zaloguj
-    </button>
-  </p>
-</div>
+    <p class="control has-icons-left">
+      <input class="input" type="password" placeholder="Hasło" name="password" required autocomplete="off">
+      <span class="icon is-small is-left">
+        <i class="fas fa-lock"></i>
+      </span>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control">
+      <button class="button is-link">
+        Zaloguj
+      </button>
+    </p>
+  </div>
+</form>
 </div>
 {% endblock %}

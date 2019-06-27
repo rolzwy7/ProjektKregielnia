@@ -1,4 +1,9 @@
 from django.db import models
+from django.contrib.auth.models import User
+
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 ROZMIARY_BUTOW = (
     ('32', 'Rozmiar 32'),
@@ -29,6 +34,30 @@ STANY_BUTOW = (
 )
 
 
+class Profil(models.Model):
+    class Meta:
+        verbose_name_plural = "Profile"
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    regulamin = models.BooleanField(default=False, null=True)
+    newsletter = models.BooleanField(default=False, null=True)
+    nr_telefonu = models.CharField(max_length=9, null=True)
+
+    def __str__(self):
+        return self.user.username
+
+    @receiver(post_save, sender=User)
+    def create_user_profile(sender, instance, created, **kwargs):
+        if created:
+            Profil.objects.create(user=instance)
+
+    @receiver(post_save, sender=User)
+    def save_user_profile(sender, instance, **kwargs):
+        try:
+            instance.profile.save()
+        except Exception as e:
+            pass
+
+
 class Tor(models.Model):
     class Meta:
         verbose_name_plural = "Tory"
@@ -36,11 +65,11 @@ class Tor(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    godzina_rozpoczecia = models.DateTimeField(null=False, blank=False)
-    godzina_zakonczenia = models.DateTimeField(null=False, blank=False)
-    nazwisko = models.CharField(null=False, blank=False, max_length=64)
     nr_toru = models.CharField(unique=True, null=False,
                                blank=False, max_length=3)
+
+    def __str__(self):
+        return "Tor %s" % self.nr_toru
 
 
 class Przekaski(models.Model):
@@ -55,6 +84,9 @@ class Przekaski(models.Model):
     nazwa = models.CharField(max_length=64, null=False, blank=False)
     cena = models.IntegerField(null=False, blank=False)
 
+    def __str__(self):
+        return self.nazwa
+
 
 class Buty(models.Model):
     class Meta:
@@ -68,6 +100,9 @@ class Buty(models.Model):
     stan = models.CharField(choices=STANY_BUTOW, max_length=1)
     rozmiar = models.CharField(choices=ROZMIARY_BUTOW, max_length=2)
 
+    def __str__(self):
+        return "%s (%s) [%s]" % (self.name, self.rozmiar, self.stan)
+
 
 class Rezerwacja(models.Model):
     class Meta:
@@ -76,9 +111,16 @@ class Rezerwacja(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    tor_id = models.ForeignKey("Tor", on_delete=models.PROTECT)
-    nazwisko = models.CharField(null=False, blank=False, max_length=64)
+    user_id = models.ForeignKey("Profil", on_delete=models.CASCADE)
+    dt_rozpoczecia = models.DateTimeField(null=False, blank=False)
+    dt_zakonczenia = models.DateTimeField(null=False, blank=False)
     ilosc_osob = models.IntegerField(null=False, blank=False)
+    ilosc_torow = models.IntegerField(null=False, blank=False)
+    ilosc_godzin = models.IntegerField(null=False, blank=False)
+    dod_info = models.TextField(null=True, blank=True)
+
+    def __str__(self):
+        return "Rezerwacja %s" % self.dt_rozpoczecia
 
 
 class PrzekaskiZamowienie(models.Model):
@@ -88,8 +130,11 @@ class PrzekaskiZamowienie(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    przekaski_id = models.ForeignKey("Przekaski", on_delete=models.PROTECT)
-    rezerwacja_id = models.ForeignKey("Rezerwacja", on_delete=models.PROTECT)
+    przekaski_id = models.ForeignKey("Przekaski", on_delete=models.CASCADE)
+    rezerwacja_id = models.ForeignKey("Rezerwacja", on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "Przekąska %s - zamówienie: %s" % (self.przekaski_id, self.rezerwacja_id)
 
 
 class ButyZamowienie(models.Model):
@@ -99,5 +144,5 @@ class ButyZamowienie(models.Model):
     date_added = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
 
-    buty_id = models.ForeignKey("Buty", on_delete=models.PROTECT)
-    rezerwacja_id = models.ForeignKey("Rezerwacja", on_delete=models.PROTECT)
+    buty_id = models.ForeignKey("Buty", on_delete=models.CASCADE)
+    rezerwacja_id = models.ForeignKey("Rezerwacja", on_delete=models.CASCADE)

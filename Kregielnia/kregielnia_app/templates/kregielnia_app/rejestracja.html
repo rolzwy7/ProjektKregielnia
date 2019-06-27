@@ -3,69 +3,99 @@
 {% block title %}Rejestracja{% endblock %}
 {% block scripts %}{% endblock %}
 {% block content %}
+
 <div class="column is-three-fifths is-offset-one-fifth">
   <p>
     <a href="/">Powróć do strony głównej</a>
   </p>
   <hr>
-  <div class="field">
-  <p class="control has-icons-left has-icons-right">
-    <input class="input" type="text" placeholder="Imię">
-    <span class="icon is-small is-left">
-      <i class="fas fa-user"></i>
-    </span>
-  </p>
-</div>
-  <div class="field">
-  <p class="control has-icons-left has-icons-right">
-    <input class="input" type="text" placeholder="Nazwisko">
-    <span class="icon is-small is-left">
-      <i class="fas fa-user"></i>
-    </span>
-  </p>
-</div>
-  <div class="field">
-  <p class="control has-icons-left has-icons-right">
-    <input class="input" type="email" placeholder="E-mail">
-    <span class="icon is-small is-left">
-      <i class="fas fa-envelope"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control has-icons-left">
-    <input class="input" type="password" placeholder="Hasło">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <p class="control has-icons-left">
-    <input class="input" type="password" placeholder="Powtórz Hasło">
-    <span class="icon is-small is-left">
-      <i class="fas fa-lock"></i>
-    </span>
-  </p>
-</div>
-<div class="field">
-  <div class="field-body">
+  {% if failed %}
+    <article class="message is-danger">
+  <div class="message-body">
+    {{failed}}
+  </div>
+</article>
+    <hr>
+  {% endif %}
+  <form class="" action="." method="post">{% csrf_token %}
     <div class="field">
-      <div class="control">
-        <label class="checkbox">
-          <input type="checkbox">
-          Akceptuję <a href="#regulamin">regulamin</a> strony.
-        </label>
+    <p class="control has-icons-left has-icons-right">
+      <input name="username" class="input" type="text" placeholder="Nazwa użytkownika" autocomplete="off" required autofocus>
+      <span class="icon is-small is-left">
+        <i class="fas fa-user"></i>
+      </span>
+    </p>
+  </div>
+    <div class="field">
+    <p class="control has-icons-left has-icons-right">
+      <input name="first_name" class="input" type="text" placeholder="Imię" autocomplete="off" required>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control has-icons-left has-icons-right">
+      <input name="last_name" class="input" type="text" placeholder="Nazwisko" autocomplete="off" required>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control has-icons-left has-icons-right">
+      <input name="nr_telefonu" class="input" type="text" placeholder="Numer telefonu" autocomplete="off" required>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control has-icons-left has-icons-right">
+      <input name="email" class="input" type="email" placeholder="E-mail" autocomplete="off" required>
+      <span class="icon is-small is-left">
+        <i class="fas fa-envelope"></i>
+      </span>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control has-icons-left">
+      <input name="password" class="input" type="password" placeholder="Hasło" autocomplete="off" required>
+      <span class="icon is-small is-left">
+        <i class="fas fa-lock"></i>
+      </span>
+    </p>
+  </div>
+  <div class="field">
+    <p class="control has-icons-left">
+      <input name="password_r" class="input" type="password" placeholder="Powtórz Hasło" autocomplete="off" required>
+      <span class="icon is-small is-left">
+        <i class="fas fa-lock"></i>
+      </span>
+    </p>
+  </div>
+  <div class="field">
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input name="regulamin" type="checkbox" required>
+            Akceptuję <a href="#regulamin">regulamin</a> strony.
+          </label>
+        </div>
       </div>
     </div>
   </div>
-</div>
-<div class="field">
-  <p class="control">
-    <button class="button is-success">
-      Zaloguj
-    </button>
-  </p>
-</div>
+  <div class="field">
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <label class="checkbox">
+            <input name="newsletter" type="checkbox">
+            Chcę zapisać się na newsletter
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="field">
+    <p class="control">
+      <button class="button is-success">
+        Zaloguj
+      </button>
+    </p>
+  </div>
+</form>
 </div>
 {% endblock %}

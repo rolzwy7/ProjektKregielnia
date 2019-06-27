@@ -1,0 +1,38 @@
+{% extends '_Main/template.html' %}
+{% load staticfiles %}
+{% block title %}Moje rezerwacje{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}
+<div class="column is-three-fifths is-offset-one-fifth">
+  <h1 class="title has-text-centered">
+    <i class="fas fa-table"></i>&nbsp;Rezerwacje
+  </h1>
+  <hr>
+  <table class="table is-fullwidth is-striped">
+    <thead>
+      <th>Data</th>
+      <th>Godzina</th>
+      <th>Osób</th>
+      <th>Torów</th>
+      <th>Godzin</th>
+    </thead>
+    <tbody>
+      {% for rb in object_list %}
+      <tr>
+        <td>
+          <a href="{% url 'zamowienie_detail' pk=rb.id %}">{{rb.dt_rozpoczecia|date:"d/m/Y"}}</a>
+        </td>
+        <td>{{rb.dt_rozpoczecia|date:"H:i"}}</td>
+        <td>{{rb.ilosc_osob}}</td>
+        <td>{{rb.ilosc_torow}}</td>
+        <td>{{rb.ilosc_godzin}}</td>
+      </tr>
+      {% empty %}
+      <p class="has-text-centered">
+        Brak rezerwacji! <a href="{% url 'rezerwacje' %}">Złóż rezerwację teraz</a>
+      </p>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

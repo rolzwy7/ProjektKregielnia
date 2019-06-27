@@ -1,7 +1,29 @@
-<div style="margin: 3px;padding: 3px;clear:both;">
-  <span style="margin: 2px;float:right;">
-    <a href="{% url 'logowanie' %}">Logowanie</a>
-    |
-    <a href="{% url 'rejestracja' %}">Rejestracja</a>
-  </span>
+<div class="container">
+  <div class="columns" style="margin: 3px;">
+    <div class="column is-12">
+      {% if user.is_authenticated %}
+      <span style="margin: 2px;float:right;">
+        <span>{{user.username}}
+          {% if user.first_name and user.last_name %}
+            ({{user.first_name}} {{user.last_name}})
+          {% endif %}
+        </span>
+        |
+        <a href="{% url 'moje_rezerwacje' %}">Moje rezerwacje</a>
+        |
+        <a href="{% url 'logout' %}">Wyloguj</a>
+        {% if user.is_staff %}
+        |
+        <a href="/admin/">Panel administratora</a>
+        {% endif %}
+      </span>
+      {% else %}
+      <span style="margin: 2px;float:right;">
+        <a href="{% url 'logowanie' %}?next=/">Logowanie</a>
+        |
+        <a href="{% url 'rejestracja' %}">Rejestracja</a>
+      </span>
+      {% endif %}
+    </div>
+  </div>
 </div>

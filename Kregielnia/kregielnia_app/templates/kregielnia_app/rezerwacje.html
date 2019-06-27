@@ -1,7 +1,345 @@
 {% extends '_Main/template.html' %}
 {% load staticfiles %}
 {% block title %}Rezerwacja{% endblock %}
-{% block scripts %}{% endblock %}
+{% block scripts %}
+<link rel="stylesheet" href="{% static 'air-datepicker/css/datepicker.min.css' %}">
+<script src="{% static 'air-datepicker/js/datepicker.min.js' %}" charset="utf-8"></script>
+<script src="{% static 'air-datepicker/i18n/datepicker.pl.js' %}" charset="utf-8"></script>
+{% endblock %}
 {% block content %}
-Rezerwacje
+<div class="column is-three-fifths is-offset-one-fifth" ng-controller="ZamowieniaCtrl as Ctrl">
+  <!-- ng-cloak -->
+{% if user.is_authenticated %}
+<!-- Rezerwacja -->
+<h1 class="title has-text-centered">
+  <i class="fas fa-history"></i>&nbsp;Rezerwacja
+</h1>
+<hr>
+
+{% if failed %}
+  <article class="message is-danger">
+<div class="message-body">
+  {{failed}}
+</div>
+</article>
+  <hr>
+{% endif %}
+
+<form action="." method="post">{% csrf_token %}
+  <!-- Data i godzina -->
+  <div class="field is-horizontal">
+    <div class="field-label is-normal">
+      <label class="label">Data i godzina rezerwacji</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control has-icons-left">
+          <input ng-click="date_ok=true" id="minMaxExample" autocomplete="off" required name="data_rozpoczecia" type="text" class="input datepicker-here" placeholder="Wybierz datę" data-language="pl">
+          <span class="icon is-left is-normal">
+            <i class="far fa-calendar-alt"></i>
+          </span>
+        </div>
+      </div>
+      <div class="field">
+        <div class="control has-icons-left">
+          <div class="select">
+            <select ng-click="hour_ok=true" required name="godzina_rozpoczecia">
+              <option value="">Wybierz godzinę</option>
+              <option value="12:00">12:00</option>
+              <option value="12:30">12:30</option>
+              <option value="13:00">13:00</option>
+              <option value="13:30">13:30</option>
+              <option value="14:00">14:00</option>
+              <option value="14:30">14:30</option>
+              <option value="15:00">15:00</option>
+              <option value="15:30">15:30</option>
+              <option value="16:00">16:00</option>
+              <option value="16:30">16:30</option>
+              <option value="17:00">17:00</option>
+              <option value="17:30">17:30</option>
+              <option value="18:00">18:00</option>
+              <option value="18:30">18:30</option>
+              <option value="19:00">19:00</option>
+              <option value="19:30">19:30</option>
+              <option value="20:00">20:00</option>
+              <option value="20:30">20:30</option>
+              <option value="21:00">21:00</option>
+              <option value="21:30">21:30</option>
+              <option value="22:00">22:00</option>
+              <option value="22:30">22:30</option>
+              <option value="23:00">23:00</option>
+            </select>
+          </div>
+          <span class="icon is-left is-normal">
+            <i class="far fa-clock"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Data i godzina End -->
+
+  <!-- Ilość godzin -->
+  <div class="field is-horizontal">
+    <div class="field-label">
+      <label class="label">Ilość godzin</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <div class="select">
+            <select required name="ilosc_godzin" ng-click="hour_len_ok=true">
+              <option value="0" selected>wybierz</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Ilość godzin End -->
+
+  <!-- Ilość osób -->
+  <div class="field is-horizontal">
+    <div class="field-label">
+      <label class="label">Ilość osób</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <div class="select">
+            <select required name="ilosc_osob" ng-model="data.osoby" ng-change="functions.adjust_tory()">
+              <option value="0" selected>wybierz</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+              <option value="13">13</option>
+              <option value="14">14</option>
+              <option value="15">15</option>
+              <option value="16">16</option>
+              <option value="17">17</option>
+              <option value="18">18</option>
+              <option value="19">19</option>
+              <option value="20">20</option>
+              <option value="21">21</option>
+              <option value="22">22</option>
+              <option value="23">23</option>
+              <option value="24">24</option>
+              <option value="25">25</option>
+              <option value="26">26</option>
+              <option value="27">27</option>
+              <option value="28">28</option>
+              <option value="29">29</option>
+              <option value="30">30</option>
+            </select>
+          </div>
+        </div>
+        <p class="help">Do rezerwacji zostanie doliczona kwota 5 zł/os. za wypożyczenie obuwia do gry.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Ilość osób End -->
+
+  <!-- Ilość torów -->
+  <div class="field is-horizontal" ng-show="show_select_tory">
+    <div class="field-label">
+      <label class="label">Ilość torów</label>
+    </div>
+    <div class="field-body">
+      <div class="field">
+        <div class="control">
+          <div class="select">
+            <select required name="ilosc_torow" ng-model="data.tory" ng-change="checkbox_tory()">
+              <option value="1" selected>1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option>
+              <option value="11">11</option>
+              <option value="12">12</option>
+            </select>
+          </div>
+        </div>
+        <p class="help">Na każdym torze grać może maksymalnie 6 osób.</p>
+      </div>
+    </div>
+  </div>
+  <!-- Ilość torów End -->
+  <p ng-show="show_select_tory"><b>Wybierz preferowane tory</b></p>
+  <table class="table is-fullwidth is-bordered" ng-show="show_select_tory">
+    <tbody>
+      <tr>
+        <td rowspan="2">Tor</td>
+        {% for tor in tory %}
+          <td class="has-text-centered">
+            <b>{{tor.nr_toru}}</b>
+          </td>
+        {% endfor %}
+      </tr>
+      <tr>
+        {% for tor in tory %}
+          <td>
+            <input type="checkbox" name="tor_{{tor.nr_toru}}" value="0" ng-model="tory_states[{{tor.nr_toru|add:-1}}]" ng-change="functions.checkbox_tory(this)" ng-disabled="tory_disabled[{{tor.nr_toru|add:-1}}]">
+          </td>
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- Dodatkowe informacje -->
+  <div class="field">
+    <label class="label">Dodatkowe informacje</label>
+    <div class="control">
+      <textarea name="dodatkowe_informacje" class="textarea" placeholder="Tutaj wpisz dodatkowe informacje"></textarea>
+    </div>
+  </div>
+  <!-- Dodatkowe informacje End -->
+
+  <!-- Przkąski -->
+  <div ng-show="show_przekaski">
+  <hr>
+  <h1 class="title has-text-centered"><i class="fas fa-pizza-slice"></i>&nbsp;Dodaj przekąski</h1>
+  <hr>
+  {% for przekaska in przekaski %}
+    <div class="field is-horizontal">
+      <div class="field-label">
+        <label class="label">{{przekaska.nazwa}}</label>
+      </div>
+      <div class="field-body">
+        <div class="field">
+          <div class="control">
+            <input name="przekaska_{{przekaska.id}}" class="input" type="number" value="0" min="0" max="100">
+          </div>
+          <p class="help">cena : {{przekaska.cena}}&nbsp;zł szt.</p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>
+  <!-- Przkąski End -->
+
+  <a ng-click="show_przekaski=true" ng-hide="show_przekaski">
+    <i class="fas fa-pizza-slice"></i>&nbsp;Dodaj przekąski
+  </a>
+
+  <!-- Wyślij -->
+  <hr>
+  <div class="field">
+    <label class="label"></label>
+    <div class="control">
+      <small ng-show="!tory_states_ok || !date_ok || !hour_ok || !hour_len_ok">
+        Wypełnij wszystkie pola aby odblokować przycisk
+      </small>
+      <br>
+      <button class="button is-link" ng-disabled="!tory_states_ok || !date_ok || !hour_ok || !hour_len_ok">Złóż zamówienie</button>
+    </div>
+  </div>
+  <!-- Wyślij End -->
+
+</form>
+
+<hr>
+
+<p>
+  Potrzebujesz rezerwacji dla więcej niż 30 osób? Napisz do nas maila!
+  <br>
+  <a href="mailto:rezerwacje@bowling.pl">
+    rezerwacje@bowling.pl
+  </a>
+</p>
+
+<!-- Rezerwacja End -->
+{% else %}
+  <h1 class="subtitle has-text-centered">
+    <strong>Musisz się zalogować aby zrobić rezerwacje</strong>
+  </h1>
+  <hr>
+  <p class="has-text-centered">
+    <a href="/logowanie/?next=/rezerwacje/">Mam konto - Logowanie</a>
+  </p>
+  <p class="has-text-centered">
+    <a href="/rejestracja/">Nie mam konta - Rejestracja</a>
+  </p>
+{% endif %}
+</div>
+
+
+<script type="text/javascript">
+
+  $('#datep').datepicker({
+    language: 'en',
+    minDate: new Date() // Now can select only dates, which goes after today
+  })
+
+  app.controller("ZamowieniaCtrl", function($scope){
+    $scope.show_przekaski = false;
+    $scope.show_select_tory = false;
+    $scope.tory_adjusted = false;
+    $scope.cena = 59;
+    $scope.tory_states = [false,false,false,false,false,false,false,false,false,false,false,false]
+    $scope.tory_disabled = [false,false,false,false,false,false,false,false,false,false,false,false]
+    $scope.tory_states_ok = false
+    $scope.date_ok = false
+    $scope.hour_ok = false
+    $scope.hour_len_ok = false
+
+
+    $scope.data = {
+      tory: "0",
+      osoby: "0"
+    };
+
+    $scope.functions = {
+      adjust_tory: function() {
+        if($scope.data.osoby == "0" || $scope.tory_adjusted) {return;}
+        var tory_int = Math.ceil(Number($scope.data.osoby) / 6)
+        console.log(tory_int);
+        $scope.data.tory = tory_int.toString();
+        // $scope.tory_adjusted = true;
+        $scope.show_select_tory = true;
+      },
+      checkbox_tory: function(elem) {
+        var counter = 0;
+        for(var i=0;i<$scope.tory_states.length;++i) {
+          console.log($scope.tory_states[i]);
+          if($scope.tory_states[i] == true) counter += 1;
+        }
+        if(counter >= Number($scope.data.tory)) {
+          for(var i=0;i<$scope.tory_states.length;++i) {
+            if($scope.tory_states[i] == false) $scope.tory_disabled[i] = true;
+          }
+          $scope.tory_states_ok = true;
+        } else {
+          for(var i=0;i<$scope.tory_states.length;++i) {
+            $scope.tory_disabled[i] = false;
+            $scope.tory_states_ok = false;
+          }
+        }
+      }
+    };
+  });
+</script>
+<script type="text/javascript">
+$('#minMaxExample').datepicker({
+  language: 'en',
+  minDate: new Date() // Now can select only dates, which goes after today
+})
+</script>
 {% endblock %}

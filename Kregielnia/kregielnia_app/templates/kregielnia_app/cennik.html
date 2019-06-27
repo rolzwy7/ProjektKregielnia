@@ -3,7 +3,71 @@
 {% block title %}Cennik{% endblock %}
 {% block scripts %}{% endblock %}
 {% block content %}
-<div class="column">
-  Cennik
+<div class="column is-10 is-offset-1">
+  <!-- Kręgle -->
+  <h1 class="title">
+    Kręgle <p class="subtitle">(wynajęcie toru na godzine)</p>
+  </h1>
+  <table class="table is-fullwidth">
+    <thead class="thead">
+      <th>Kręgle</th>
+      <th>Pn-Czw</th>
+      <th>Pt</th>
+      <th>So, Nd</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td><b>do 17:00</b></td>
+        <td>49zł</td>
+        <td>49zł</td>
+        <td>79zł</td>
+      </tr>
+      <tr>
+        <td><b>po 17:00</b></td>
+        <td>69zł</td>
+        <td>89zł</td>
+        <td>89zł</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Kręgle End -->
+
+  <!-- Przekąski -->
+  <h1 class="title">
+    Przekąski
+  </h1>
+  <table class="table is-fullwidth">
+    <thead class="thead">
+      <th>Nazwa</th>
+      <th>Cena</th>
+    </thead>
+    <tbody>
+      {% for przekaska in przekaski %}
+      <tr>
+        <td>{{przekaska.nazwa}}</td>
+        <td>{{przekaska.cena}}&nbsp;zł</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <!-- Przekąski End -->
+
+  <!-- Obuwie -->
+  <h1 class="title">
+    Wypożyczenie obuwia
+  </h1>
+  <table class="table is-fullwidth">
+    <thead class="thead">
+      <th></th>
+      <th>Cena</th>
+    </thead>
+    <tbody>
+      <tr>
+        <td>buty do kręgli</td>
+        <td>5zł</td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- Obuwie End -->
 </div>
 {% endblock %}

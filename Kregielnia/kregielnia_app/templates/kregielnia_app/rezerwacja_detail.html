@@ -1,0 +1,139 @@
+{% extends '_Main/template.html' %}
+{% load staticfiles %}
+{% block title %}Moje rezerwacje{% endblock %}
+{% block scripts %}{% endblock %}
+{% block content %}
+<div class="column is-three-fifths is-offset-one-fifth">
+  <h1 class="subtitle has-text-centered">
+    <b>Rezerwacja {{object.dt_rozpoczecia|date:"d/m/Y H:i"}}</b>
+    <br>
+    ({{object.dt_rozpoczecia|date:"l"}})
+  </h1>
+
+    {% if has_access %}
+
+    <hr>
+    <table class="table is-fullwidth is-striped">
+      <tbody>
+        <tr>
+          <td>Godzina rozpoczęcia</td>
+          <td>{{object.dt_rozpoczecia}}</td>
+        </tr>
+        <tr>
+          <td>Godzina zakończenia</td>
+          <td>{{object.dt_zakonczenia}}</td>
+        </tr>
+        <tr>
+          <td>Ilość osób</td>
+          <td>{{object.ilosc_osob}}</td>
+        </tr>
+        <tr>
+          <td>Ilość torów</td>
+          <td>{{object.ilosc_torow}}</td>
+        </tr>
+        <tr>
+          <td>Ilość godzin</td>
+          <td>{{object.ilosc_godzin}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1 class="subtitle">
+      <b>Wypożyczenie butów</b>
+    </h1>
+    Osoby: {{object.ilosc_osob}}
+    <br>
+    <b>Suma:</b> {{buty_cena}} zł
+    <hr>
+
+    <h1 class="subtitle">
+      <b>Rezerwacja torów</b>
+    </h1>
+
+    {% if object.dt_rozpoczecia|date:"w" == "0" %}
+      Niedziela
+        {% if po_17 %} (po 17:00) 89{% else %}(przed 17:00) 79{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "6" %}
+      Sobota
+        {% if po_17 %} (po 17:00) 89{% else %}(przed 17:00) 79{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "5" %}
+      Piątek
+        {% if po_17 %} (po 17:00) 89{% else %}(przed 17:00) 49{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "4" %}
+      Czwartek
+        {% if po_17 %} (po 17:00) 69{% else %}(przed 17:00) 49{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "3" %}
+      Środa
+        {% if po_17 %} (po 17:00) 69{% else %}(przed 17:00) 49{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "2" %}
+      Wtorek
+        {% if po_17 %} (po 17:00) 69{% else %}(przed 17:00) 49{% endif %} zł
+    {% endif %}
+    {% if object.dt_rozpoczecia|date:"w" == "1" %}
+      Poniedziałek
+        {% if po_17 %} (po 17:00) 69{% else %}(przed 17:00) 49{% endif %} zł
+    {% endif %}
+    <br>
+    Tory: {{object.ilosc_torow}}
+    <br>
+    Godziny: {{object.ilosc_godzin}}
+    <br>
+    Wynajęcie jednego toru: {{za_tor}} zł
+    <br>
+    <b>Suma:</b> {{object.ilosc_torow}} tor x {{object.ilosc_godzin}} godzin x {{za_tor}} zł = <b>{{za_tor_suma}}</b> zł
+<hr>
+
+    <h1 class="subtitle">
+      <b>Przekąski</b>
+    </h1>
+    <table class="table is-fullwidth is-striped">
+      <tbody>
+        {% for prz in przekaski %}
+        <tr>
+          <td>{{prz.przekaski_id.nazwa}}</td>
+          <td>{{prz.przekaski_id.cena}} zł</td>
+        </tr>
+        {% endfor %}
+        <tr>
+          <td style="text-align:right;"><b>Suma:</b></td>
+          <td>{{przekaski_cena}} zł</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h1 class="subtitle">
+      <b>Do zapłaty</b>
+    </h1>
+    <p class="subtitle has-text-centered">
+      {{suma_final}} zł
+    </p>
+    <hr>
+
+    <h1 class="subtitle">
+      <b>Dodatkowe informacje</b>
+    </h1>
+    <p class="has-text-centered">
+      <pre>
+        {% if object.dod_info %}
+        {{object.dod_info}}
+        {% else %}
+        - Brak -
+        {% endif %}
+      </pre>
+    </p>
+
+    {% else %}
+    <h1 class="subtitle has-text-centered">
+      <b>
+        Nie masz uprawnień aby przeglądać to zamówienie
+      </b>
+    </h1>
+    {% endif %}
+
+</div>
+{% endblock %}

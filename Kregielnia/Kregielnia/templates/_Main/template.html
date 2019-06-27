@@ -22,10 +22,21 @@
     <!-- Font-Awesome End -->
     <!-- Angular -->
     <script src="{% static 'angular/angular.min.js' %}" charset="utf-8"></script>
+
+    {% block scripts %}{% endblock %}
+
     <title>{% block title %}{% endblock %}</title>
+    <script type="text/javascript">
+      var app = angular.module('KregielniaApp', []);
+        app.config(['$interpolateProvider', function($interpolateProvider) {
+        $interpolateProvider.startSymbol('{a');
+        $interpolateProvider.endSymbol('a}');
+      }]);
+
+    </script>
   </head>
 
-  <body>
+  <body ng-app="KregielniaApp">
     {% include './upper-bar.html' %}
 
     <div class="container">
